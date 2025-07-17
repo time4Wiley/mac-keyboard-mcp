@@ -13,3 +13,6 @@ pub use search::FuzzySearcher;
 
 /// Current version of the MCP server
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
+
+#[cfg(test)]
+mod lib_tests;

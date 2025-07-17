@@ -19,7 +19,7 @@ async fn main() -> Result<()> {
     info!("Starting Mac Keyboard MCP server v{}", env!("CARGO_PKG_VERSION"));
     
     // Create and run the MCP server
-    let server = MacKeyboardServer::new()?;
+    let _server = MacKeyboardServer::new()?;
     
     // TODO: Replace with actual MCP server run when rmcp is available
     info!("Server initialized successfully");

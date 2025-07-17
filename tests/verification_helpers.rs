@@ -77,7 +77,7 @@ pub fn generate_report(results: Vec<(String, bool)>) -> Value {
     };
     
     json!({
-        "timestamp": chrono::Local::now().to_rfc3339(),
+        "timestamp": "2024-01-01T00:00:00Z", // Placeholder timestamp
         "summary": {
             "total_tests": total,
             "passed": passed,

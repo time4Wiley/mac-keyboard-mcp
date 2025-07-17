@@ -1,0 +1,49 @@
+# Rust
+/target/
+**/*.rs.bk
+Cargo.lock
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Verification outputs
+/verification_reports/
+/analysis/verification_report.json
+/scripts/*.log
+
+# Build artifacts
+*.o
+*.a
+*.so
+*.dylib
+*.dll
+*.exe
+
+# Test coverage
+*.profraw
+*.profdata
+/coverage/
+
+# Documentation
+/docs/_build/
+/docs/.doctrees/
+
+# Temporary files
+*.tmp
+*.bak
+.cache/
