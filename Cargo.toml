@@ -1,0 +1,73 @@
+[package]
+name = "mac-keyboard-mcp"
+version = "0.1.0"
+edition = "2021"
+authors = ["Your Name <email@example.com>"]
+description = "MCP server for macOS AppleScript key codes"
+license = "MIT"
+repository = "https://github.com/username/mac-keyboard-mcp"
+keywords = ["mcp", "macos", "applescript", "keyboard", "automation"]
+categories = ["api-bindings", "os::macos-apis"]
+
+[dependencies]
+# MCP SDK - using placeholder for now
+# TODO: Update to rmcp when available
+# mcp-sdk = "0.0.3"
+
+# Async runtime
+tokio = { version = "1.43", features = ["full"] }
+async-trait = "0.1"
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Static initialization
+once_cell = "1.20"
+
+# Fuzzy matching
+fuzzy-matcher = "0.3"
+
+# Error handling
+thiserror = "2.0"
+anyhow = "1.0"
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# Utilities
+strum = { version = "0.26", features = ["derive"] }
+strum_macros = "0.26"
+
+# For verify binary
+colored = { version = "2.1", optional = true }
+chrono = { version = "0.4", optional = true }
+
+[dev-dependencies]
+tokio-test = "0.4"
+assert-json-diff = "2.0"
+pretty_assertions = "1.4"
+
+[[bin]]
+name = "mac-keyboard-mcp"
+path = "src/main.rs"
+
+[[bin]]
+name = "verify"
+path = "src/bin/verify.rs"
+required-features = ["verification"]
+
+[features]
+default = []
+verification = ["colored", "chrono"]
+
+[profile.release]
+lto = true
+codegen-units = 1
+opt-level = 3
+strip = true
+
+[profile.dev]
+opt-level = 0
+debug = true
