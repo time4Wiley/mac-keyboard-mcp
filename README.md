@@ -60,7 +60,7 @@ Add to your MCP client configuration:
 Find the AppleScript key code for a specific key.
 
 **Parameters:**
-- `key_name` (string, required): Name of the key (e.g., "A", "Space", "Command")
+- `key_name` (string, required): Name of the key (e.g., "A", "Space", "Command", "F3+")
 - `fuzzy` (boolean, optional): Enable fuzzy matching for typos
 
 **Example:**
@@ -83,6 +83,40 @@ Find the AppleScript key code for a specific key.
     "code": 55,
     "category": "modifier_keys",
     "aliases": ["Cmd", "⌘"]
+  }
+}
+```
+
+**F-Key Secondary Functions:**
+Use the `F{n}+` notation (e.g., "F3+") to query F-key secondary functions:
+
+```json
+{
+  "tool": "lookup_keycode",
+  "arguments": {
+    "key_name": "F3+"
+  }
+}
+```
+
+**Response:**
+```json
+{
+  "found": true,
+  "query_type": "secondary_function",
+  "f_key": {
+    "name": "F3",
+    "primary_function": {
+      "name": "F3",
+      "code": 99,
+      "description": "Traditional F3 function key"
+    },
+    "secondary_function": {
+      "name": "Mission Control",
+      "code": 160,
+      "description": "Show all open windows"
+    },
+    "note": "On modern Mac keyboards, pressing F3 triggers 'Mission Control' by default. Use Fn+F3 to get the traditional F3 function."
   }
 }
 ```
@@ -211,6 +245,25 @@ This server handles the dual nature of modern Mac function keys:
 - **F13-F19**: Often accessed via Fn+F1 through Fn+F12
 
 The server provides aliases for media functions where applicable (e.g., "Brightness Down" maps to F14/code 107).
+
+### F-Key Secondary Function Mappings
+
+| F-Key | Primary (Fn+F#) | Secondary (Default) | Secondary Code |
+|-------|-----------------|---------------------|----------------|
+| F1    | F1 (122)       | Brightness Down     | 107 (F14)      |
+| F2    | F2 (120)       | Brightness Up       | 113 (F15)      |
+| F3    | F3 (99)        | Mission Control     | 160 (F17)      |
+| F4    | F4 (118)       | Launchpad          | 131 (F18)      |
+| F5    | F5 (96)        | Keyboard Illumination Down | 105 (F13) |
+| F6    | F6 (97)        | Keyboard Illumination Up | 106 (F16) |
+| F7    | F7 (98)        | Previous Track      | 98             |
+| F8    | F8 (100)       | Play/Pause         | 100            |
+| F9    | F9 (101)       | Next Track         | 101            |
+| F10   | F10 (109)      | Mute               | 74             |
+| F11   | F11 (103)      | Volume Down        | 73             |
+| F12   | F12 (111)      | Volume Up          | 72             |
+
+Use the `F{n}+` notation with the `lookup_keycode` tool to get both mappings.
 
 ## License
 

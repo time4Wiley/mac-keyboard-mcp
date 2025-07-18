@@ -3,20 +3,20 @@ use serde::Deserialize;
 use serde_json::{json, Value};
 use tracing::debug;
 
-use crate::keycode::{KEY_DATABASE, KeyCategory, parse_shortcut};
+use crate::keycode::{KEY_DATABASE, KeyCategory, parse_shortcut, is_secondary_function_query, get_secondary_function};
 use crate::search::FuzzySearcher;
 
 /// Tool definition for lookup_keycode
 pub fn lookup_keycode_tool() -> Value {
     json!({
         "name": "lookup_keycode",
-        "description": "Find AppleScript key code for a specific key",
+        "description": "Find AppleScript key code for a specific key. Use 'F{n}+' format (e.g., 'F3+') to get secondary function info for F-keys",
         "inputSchema": {
             "type": "object",
             "properties": {
                 "key_name": {
                     "type": "string",
-                    "description": "Name of the key (e.g., 'A', 'Space', 'Command', 'F1')"
+                    "description": "Name of the key (e.g., 'A', 'Space', 'F1', 'F3+' for F3's secondary function)"
                 },
                 "fuzzy": {
                     "type": "boolean",
@@ -94,6 +94,38 @@ pub async fn handle_lookup(args: Value) -> Result<Value> {
     let args: LookupArgs = serde_json::from_value(args)?;
     debug!("Looking up key: {}", args.key_name);
     
+    // Check if this is a secondary function query (e.g., "F3+")
+    if let Some(f_key) = is_secondary_function_query(&args.key_name) {
+        if let Some(secondary) = get_secondary_function(f_key) {
+            // Also get the primary F-key info
+            let primary = KEY_DATABASE.lookup(f_key).unwrap();
+            
+            return Ok(json!({
+                "found": true,
+                "query_type": "secondary_function",
+                "f_key": {
+                    "name": f_key,
+                    "primary_function": {
+                        "name": primary.name,
+                        "code": primary.code,
+                        "description": format!("Traditional {} function key", f_key),
+                    },
+                    "secondary_function": {
+                        "name": secondary.name,
+                        "code": secondary.keycode,
+                        "description": secondary.description,
+                    },
+                    "note": format!(
+                        "On modern Mac keyboards, pressing {} triggers '{}' by default. \
+                        Use Fn+{} to get the traditional {} function.",
+                        f_key, secondary.name, f_key, f_key
+                    ),
+                }
+            }));
+        }
+    }
+    
+    // Regular lookup
     if let Some(keycode) = KEY_DATABASE.lookup(&args.key_name) {
         Ok(json!({
             "found": true,
