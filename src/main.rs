@@ -133,7 +133,9 @@ async fn handle_request(server: &MacKeyboardServer, request: JsonRpcRequest) -> 
             JsonRpcResponse {
                 jsonrpc: "2.0".to_string(),
                 id: request.id,
-                result: Some(server.list_tools()),
+                result: Some(json!({
+                    "tools": server.list_tools()
+                })),
                 error: None,
             }
         }
@@ -189,7 +191,9 @@ async fn handle_request(server: &MacKeyboardServer, request: JsonRpcRequest) -> 
             JsonRpcResponse {
                 jsonrpc: "2.0".to_string(),
                 id: request.id,
-                result: Some(server.list_resources()),
+                result: Some(json!({
+                    "resources": server.list_resources()
+                })),
                 error: None,
             }
         }
