@@ -174,7 +174,12 @@ async fn handle_request(server: &MacKeyboardServer, request: JsonRpcRequest) -> 
                         Ok(result) => JsonRpcResponse {
                             jsonrpc: "2.0".to_string(),
                             id: request.id,
-                            result: Some(json!({ "content": [result] })),
+                            result: Some(json!({ 
+                                "content": [{
+                                    "type": "text",
+                                    "text": serde_json::to_string_pretty(&result).unwrap()
+                                }]
+                            })),
                             error: None,
                         },
                         Err(e) => JsonRpcResponse {
@@ -232,7 +237,13 @@ async fn handle_request(server: &MacKeyboardServer, request: JsonRpcRequest) -> 
                         Ok(result) => JsonRpcResponse {
                             jsonrpc: "2.0".to_string(),
                             id: request.id,
-                            result: Some(json!({ "contents": [result] })),
+                            result: Some(json!({ 
+                                "contents": [{
+                                    "uri": resource_read.uri,
+                                    "mimeType": "application/json",
+                                    "text": serde_json::to_string_pretty(&result).unwrap()
+                                }]
+                            })),
                             error: None,
                         },
                         Err(e) => JsonRpcResponse {
