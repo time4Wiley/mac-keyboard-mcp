@@ -14,10 +14,18 @@ use crate::mcp::MacKeyboardServer;
 
 #[derive(Debug, Deserialize)]
 struct JsonRpcRequest {
+    #[serde(default = "default_jsonrpc")]
     jsonrpc: String,
+    #[serde(default)]
     id: Option<Value>,
-    method: String,
+    #[serde(default)]
+    method: Option<String>,
+    #[serde(default)]
     params: Option<Value>,
+}
+
+fn default_jsonrpc() -> String {
+    "2.0".to_string()
 }
 
 #[derive(Debug, Serialize)]
@@ -80,9 +88,11 @@ async fn main() -> Result<()> {
         match serde_json::from_str::<JsonRpcRequest>(&line) {
             Ok(request) => {
                 // Track initialization state
-                if request.method == "initialized" {
-                    initialized = true;
-                    debug!("Client initialization complete");
+                if let Some(ref method) = request.method {
+                    if method == "initialized" {
+                        initialized = true;
+                        debug!("Client initialization complete");
+                    }
                 }
                 
                 let response = handle_request(&server, request).await;
@@ -99,14 +109,26 @@ async fn main() -> Result<()> {
             }
             Err(e) => {
                 error!("Failed to parse request: {}", e);
+                error!("Raw request was: {}", line);
+                
+                // Try to extract ID from raw JSON for error response
+                let id = if let Ok(raw_json) = serde_json::from_str::<Value>(&line) {
+                    raw_json.get("id").cloned()
+                } else {
+                    None
+                };
+                
                 let error_response = JsonRpcResponse {
                     jsonrpc: "2.0".to_string(),
-                    id: None,
+                    id,
                     result: None,
                     error: Some(JsonRpcError {
                         code: -32700,
                         message: "Parse error".to_string(),
-                        data: Some(json!({"details": e.to_string()})),
+                        data: Some(json!({
+                            "details": e.to_string(),
+                            "raw_request": line
+                        })),
                     }),
                 };
                 
@@ -122,7 +144,24 @@ async fn main() -> Result<()> {
 }
 
 async fn handle_request(server: &MacKeyboardServer, request: JsonRpcRequest) -> JsonRpcResponse {
-    match request.method.as_str() {
+    // Handle case where method might be None
+    let method = match request.method {
+        Some(m) => m,
+        None => {
+            return JsonRpcResponse {
+                jsonrpc: "2.0".to_string(),
+                id: request.id,
+                result: None,
+                error: Some(JsonRpcError {
+                    code: -32600,
+                    message: "Invalid Request: missing method".to_string(),
+                    data: None,
+                }),
+            };
+        }
+    };
+    
+    match method.as_str() {
         "initialize" => {
             // MCP initialization
             JsonRpcResponse {
@@ -290,7 +329,7 @@ async fn handle_request(server: &MacKeyboardServer, request: JsonRpcRequest) -> 
                 result: None,
                 error: Some(JsonRpcError {
                     code: -32601,
-                    message: format!("Method not found: {}", request.method),
+                    message: format!("Method not found: {}", method),
                     data: None,
                 }),
             }
