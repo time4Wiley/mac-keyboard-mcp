@@ -6,6 +6,7 @@ pub mod keycode;
 pub mod mcp;
 pub mod search;
 pub mod utils;
+pub mod mcp_server;
 
 pub use keycode::{KeyCode, KeyCategory, KEY_DATABASE};
 pub use mcp::MacKeyboardServer;

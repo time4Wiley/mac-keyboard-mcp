@@ -10,9 +10,11 @@ keywords = ["mcp", "macos", "applescript", "keyboard", "automation"]
 categories = ["api-bindings", "os::macos-apis"]
 
 [dependencies]
-# MCP SDK - using placeholder for now
-# TODO: Update to rmcp when available
-# mcp-sdk = "0.0.3"
+# MCP SDK - using official SDK from local path
+rmcp = { path = "mcp-rust-sdk/crates/rmcp", features = ["server", "transport-io"] }
+
+# Schema support for rmcp
+schemars = "1.0"
 
 # Async runtime
 tokio = { version = "1.43", features = ["full"] }

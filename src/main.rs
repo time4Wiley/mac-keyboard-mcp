@@ -58,9 +58,18 @@ async fn main() -> Result<()> {
     
     info!("MCP server ready, listening on stdio...");
     
+    let mut initialized = false;
+    
     // Process JSON-RPC messages
     for line in reader.lines() {
-        let line = line?;
+        let line = match line {
+            Ok(l) => l,
+            Err(e) => {
+                error!("Error reading from stdin: {}", e);
+                break;
+            }
+        };
+        
         if line.trim().is_empty() {
             continue;
         }
@@ -70,12 +79,23 @@ async fn main() -> Result<()> {
         // Parse the JSON-RPC request
         match serde_json::from_str::<JsonRpcRequest>(&line) {
             Ok(request) => {
+                // Track initialization state
+                if request.method == "initialized" {
+                    initialized = true;
+                    debug!("Client initialization complete");
+                }
+                
                 let response = handle_request(&server, request).await;
                 let response_str = serde_json::to_string(&response)?;
                 
                 debug!("Sending: {}", response_str);
                 writeln!(stdout, "{}", response_str)?;
                 stdout.flush()?;
+                
+                // Continue running after initialization
+                if initialized {
+                    debug!("Server is initialized and ready for requests");
+                }
             }
             Err(e) => {
                 error!("Failed to parse request: {}", e);
@@ -97,7 +117,7 @@ async fn main() -> Result<()> {
         }
     }
     
-    info!("Server shutting down");
+    info!("Client disconnected, server shutting down");
     Ok(())
 }
 
@@ -110,7 +130,12 @@ async fn handle_request(server: &MacKeyboardServer, request: JsonRpcRequest) -> 
                 id: request.id,
                 result: Some(json!({
                     "protocolVersion": "2024-11-05",
-                    "capabilities": server.capabilities(),
+                    "capabilities": {
+                        "tools": {},
+                        "resources": {},
+                        "prompts": {},
+                        "logging": {}
+                    },
                     "serverInfo": {
                         "name": "mac-keyboard-mcp",
                         "version": env!("CARGO_PKG_VERSION")
@@ -121,10 +146,12 @@ async fn handle_request(server: &MacKeyboardServer, request: JsonRpcRequest) -> 
         }
         "initialized" => {
             // Client confirms initialization
+            // Even though this is typically a notification, Claude expects a response
+            debug!("Client initialized");
             JsonRpcResponse {
                 jsonrpc: "2.0".to_string(),
-                id: request.id,
-                result: Some(json!({})),
+                id: request.id,  // Keep the ID from request
+                result: Some(json!({})),  // Empty result
                 error: None,
             }
         }
