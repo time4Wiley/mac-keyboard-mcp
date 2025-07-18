@@ -1,0 +1,58 @@
+{
+  "timestamp": "2025-07-18T08:56:53.212293",
+  "results": [
+    {
+      "key": "A",
+      "code": 0,
+      "passed": true,
+      "message": "Success"
+    },
+    {
+      "key": "Space",
+      "code": 49,
+      "passed": true,
+      "message": "Success"
+    },
+    {
+      "key": "Return",
+      "code": 36,
+      "passed": true,
+      "message": "Success"
+    },
+    {
+      "key": "Command",
+      "code": 55,
+      "passed": true,
+      "message": "Success"
+    },
+    {
+      "key": "F1",
+      "code": 122,
+      "passed": true,
+      "message": "Success"
+    },
+    {
+      "key": "F17",
+      "code": 160,
+      "passed": true,
+      "message": "Success"
+    },
+    {
+      "key": "LeftArrow",
+      "code": 123,
+      "passed": true,
+      "message": "Success"
+    },
+    {
+      "key": "Escape",
+      "code": 53,
+      "passed": true,
+      "message": "Success"
+    }
+  ],
+  "summary": {
+    "total": 8,
+    "passed": 8,
+    "failed": 0
+  }
+}

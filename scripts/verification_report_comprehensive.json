@@ -1,0 +1,338 @@
+{
+  "metadata": {
+    "timestamp": "2025-07-18T08:58:06.574708",
+    "platform": "macOS",
+    "test_type": "comprehensive"
+  },
+  "categories": {
+    "letters": {
+      "total_keys": 26,
+      "tested": 5,
+      "results": [
+        {
+          "key": "A",
+          "code": 0,
+          "passed": true
+        },
+        {
+          "key": "G",
+          "code": 5,
+          "passed": true
+        },
+        {
+          "key": "N",
+          "code": 45,
+          "passed": true
+        },
+        {
+          "key": "T",
+          "code": 17,
+          "passed": true
+        },
+        {
+          "key": "Z",
+          "code": 6,
+          "passed": true
+        }
+      ],
+      "passed": 5
+    },
+    "numbers": {
+      "total_keys": 10,
+      "tested": 5,
+      "results": [
+        {
+          "key": "0",
+          "code": 29,
+          "passed": true
+        },
+        {
+          "key": "2",
+          "code": 19,
+          "passed": true
+        },
+        {
+          "key": "5",
+          "code": 23,
+          "passed": true
+        },
+        {
+          "key": "7",
+          "code": 26,
+          "passed": true
+        },
+        {
+          "key": "9",
+          "code": 25,
+          "passed": true
+        }
+      ],
+      "passed": 5
+    },
+    "function_keys": {
+      "total_keys": 20,
+      "tested": 5,
+      "results": [
+        {
+          "key": "F1",
+          "code": 122,
+          "passed": true
+        },
+        {
+          "key": "F6",
+          "code": 97,
+          "passed": true
+        },
+        {
+          "key": "F11",
+          "code": 103,
+          "passed": true
+        },
+        {
+          "key": "F16",
+          "code": 106,
+          "passed": true
+        },
+        {
+          "key": "F20",
+          "code": 90,
+          "passed": true
+        }
+      ],
+      "passed": 5
+    },
+    "modifier_keys": {
+      "total_keys": 12,
+      "tested": 5,
+      "results": [
+        {
+          "key": "Command",
+          "code": 55,
+          "passed": true
+        },
+        {
+          "key": "ShiftRight",
+          "code": 60,
+          "passed": true
+        },
+        {
+          "key": "OptionRight",
+          "code": 61,
+          "passed": true
+        },
+        {
+          "key": "ControlRight",
+          "code": 62,
+          "passed": true
+        },
+        {
+          "key": "Fn",
+          "code": 63,
+          "passed": true
+        }
+      ],
+      "passed": 5
+    },
+    "navigation_keys": {
+      "total_keys": 8,
+      "tested": 5,
+      "results": [
+        {
+          "key": "LeftArrow",
+          "code": 123,
+          "passed": true
+        },
+        {
+          "key": "UpArrow",
+          "code": 126,
+          "passed": true
+        },
+        {
+          "key": "PageUp",
+          "code": 116,
+          "passed": true
+        },
+        {
+          "key": "Home",
+          "code": 115,
+          "passed": true
+        },
+        {
+          "key": "End",
+          "code": 119,
+          "passed": true
+        }
+      ],
+      "passed": 5
+    },
+    "special_keys": {
+      "total_keys": 11,
+      "tested": 5,
+      "results": [
+        {
+          "key": "Space",
+          "code": 49,
+          "passed": true
+        },
+        {
+          "key": "Tab",
+          "code": 48,
+          "passed": true
+        },
+        {
+          "key": "Escape",
+          "code": 53,
+          "passed": true
+        },
+        {
+          "key": "Mute",
+          "code": 74,
+          "passed": true
+        },
+        {
+          "key": "VolumeDown",
+          "code": 73,
+          "passed": true
+        }
+      ],
+      "passed": 5
+    },
+    "numpad_keys": {
+      "total_keys": 18,
+      "tested": 5,
+      "results": [
+        {
+          "key": "Numpad0",
+          "code": 82,
+          "passed": true
+        },
+        {
+          "key": "Numpad4",
+          "code": 86,
+          "passed": true
+        },
+        {
+          "key": "Numpad9",
+          "code": 92,
+          "passed": true
+        },
+        {
+          "key": "NumpadEnter",
+          "code": 76,
+          "passed": true
+        },
+        {
+          "key": "NumpadPlus",
+          "code": 69,
+          "passed": true
+        }
+      ],
+      "passed": 5
+    },
+    "punctuation": {
+      "total_keys": 11,
+      "tested": 5,
+      "results": [
+        {
+          "key": "Grave",
+          "code": 50,
+          "passed": true
+        },
+        {
+          "key": "Equal",
+          "code": 24,
+          "passed": true
+        },
+        {
+          "key": "Backslash",
+          "code": 42,
+          "passed": true
+        },
+        {
+          "key": "Comma",
+          "code": 43,
+          "passed": true
+        },
+        {
+          "key": "Slash",
+          "code": 44,
+          "passed": true
+        }
+      ],
+      "passed": 5
+    }
+  },
+  "special_tests": {
+    "F17_key": {
+      "description": "Testing F17 (code 160) - previously missing",
+      "results": [
+        {
+          "key": "F17",
+          "code": 160,
+          "passed": true
+        }
+      ],
+      "passed": 1,
+      "total": 1
+    },
+    "corrected_f_keys": {
+      "description": "Testing corrected F-keys",
+      "results": [
+        {
+          "key": "F7",
+          "code": 98,
+          "passed": true
+        },
+        {
+          "key": "F8",
+          "code": 100,
+          "passed": true
+        },
+        {
+          "key": "F10",
+          "code": 109,
+          "passed": true
+        },
+        {
+          "key": "F18",
+          "code": 131,
+          "passed": true
+        }
+      ],
+      "passed": 4,
+      "total": 4
+    },
+    "modifier_combinations": {
+      "description": "Testing modifier combinations",
+      "results": [
+        {
+          "shortcut": "Cmd+A",
+          "passed": true
+        },
+        {
+          "shortcut": "Cmd+C",
+          "passed": true
+        },
+        {
+          "shortcut": "Shift+Tab",
+          "passed": true
+        },
+        {
+          "shortcut": "Option+Left",
+          "passed": true
+        }
+      ],
+      "passed": 4,
+      "total": 4
+    }
+  },
+  "summary": {
+    "total_keys_in_database": 116,
+    "total_tested": 49,
+    "total_passed": 49,
+    "total_failed": 0,
+    "pass_rate": "100.0%",
+    "categories_tested": 8,
+    "special_tests_run": 3
+  }
+}
