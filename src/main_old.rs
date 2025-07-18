@@ -170,7 +170,7 @@ async fn handle_request(server: &MacKeyboardServer, request: JsonRpcRequest) -> 
     match method.as_str() {
         "initialize" => {
             // MCP initialization
-            Some(JsonRpcResponse {
+            JsonRpcResponse {
                 jsonrpc: "2.0".to_string(),
                 id: request.id,
                 result: Some(json!({
@@ -187,42 +187,36 @@ async fn handle_request(server: &MacKeyboardServer, request: JsonRpcRequest) -> 
                     }
                 })),
                 error: None,
-            })
+            }
         }
         "initialized" => {
             // Client confirms initialization
-            // This is a notification, so no response needed unless it has an ID
+            // Even though this is typically a notification, Claude expects a response
             debug!("Client initialized");
-            
-            // Only respond if it has an ID (not a notification)
-            if request.id.is_some() {
-                Some(JsonRpcResponse {
-                    jsonrpc: "2.0".to_string(),
-                    id: request.id,
-                    result: Some(json!({})),
-                    error: None,
-                })
-            } else {
-                None
+            JsonRpcResponse {
+                jsonrpc: "2.0".to_string(),
+                id: request.id,  // Keep the ID from request
+                result: Some(json!({})),  // Empty result
+                error: None,
             }
         }
         "tools/list" => {
             // List available tools
-            Some(JsonRpcResponse {
+            JsonRpcResponse {
                 jsonrpc: "2.0".to_string(),
                 id: request.id,
                 result: Some(json!({
                     "tools": server.list_tools()
                 })),
                 error: None,
-            })
+            }
         }
         "tools/call" => {
             // Call a tool
             if let Some(params) = request.params {
                 if let Ok(tool_call) = serde_json::from_value::<ToolCall>(params) {
                     match server.call_tool(&tool_call.name, tool_call.arguments).await {
-                        Ok(result) => Some(JsonRpcResponse {
+                        Ok(result) => JsonRpcResponse {
                             jsonrpc: "2.0".to_string(),
                             id: request.id,
                             result: Some(json!({ 
@@ -232,8 +226,8 @@ async fn handle_request(server: &MacKeyboardServer, request: JsonRpcRequest) -> 
                                 }]
                             })),
                             error: None,
-                        }),
-                        Err(e) => Some(JsonRpcResponse {
+                        },
+                        Err(e) => JsonRpcResponse {
                             jsonrpc: "2.0".to_string(),
                             id: request.id,
                             result: None,
@@ -242,10 +236,10 @@ async fn handle_request(server: &MacKeyboardServer, request: JsonRpcRequest) -> 
                                 message: "Tool execution error".to_string(),
                                 data: Some(json!({"details": e.to_string()})),
                             }),
-                        }),
+                        },
                     }
                 } else {
-                    Some(JsonRpcResponse {
+                    JsonRpcResponse {
                         jsonrpc: "2.0".to_string(),
                         id: request.id,
                         result: None,
@@ -254,10 +248,10 @@ async fn handle_request(server: &MacKeyboardServer, request: JsonRpcRequest) -> 
                             message: "Invalid params".to_string(),
                             data: None,
                         }),
-                    })
+                    }
                 }
             } else {
-                Some(JsonRpcResponse {
+                JsonRpcResponse {
                     jsonrpc: "2.0".to_string(),
                     id: request.id,
                     result: None,
@@ -266,26 +260,26 @@ async fn handle_request(server: &MacKeyboardServer, request: JsonRpcRequest) -> 
                         message: "Missing params".to_string(),
                         data: None,
                     }),
-                })
+                }
             }
         }
         "resources/list" => {
             // List available resources
-            Some(JsonRpcResponse {
+            JsonRpcResponse {
                 jsonrpc: "2.0".to_string(),
                 id: request.id,
                 result: Some(json!({
                     "resources": server.list_resources()
                 })),
                 error: None,
-            })
+            }
         }
         "resources/read" => {
             // Read a resource
             if let Some(params) = request.params {
                 if let Ok(resource_read) = serde_json::from_value::<ResourceRead>(params) {
                     match server.read_resource(&resource_read.uri).await {
-                        Ok(result) => Some(JsonRpcResponse {
+                        Ok(result) => JsonRpcResponse {
                             jsonrpc: "2.0".to_string(),
                             id: request.id,
                             result: Some(json!({ 
@@ -296,8 +290,8 @@ async fn handle_request(server: &MacKeyboardServer, request: JsonRpcRequest) -> 
                                 }]
                             })),
                             error: None,
-                        }),
-                        Err(e) => Some(JsonRpcResponse {
+                        },
+                        Err(e) => JsonRpcResponse {
                             jsonrpc: "2.0".to_string(),
                             id: request.id,
                             result: None,
@@ -306,10 +300,10 @@ async fn handle_request(server: &MacKeyboardServer, request: JsonRpcRequest) -> 
                                 message: "Resource read error".to_string(),
                                 data: Some(json!({"details": e.to_string()})),
                             }),
-                        }),
+                        },
                     }
                 } else {
-                    Some(JsonRpcResponse {
+                    JsonRpcResponse {
                         jsonrpc: "2.0".to_string(),
                         id: request.id,
                         result: None,
@@ -318,10 +312,10 @@ async fn handle_request(server: &MacKeyboardServer, request: JsonRpcRequest) -> 
                             message: "Invalid params".to_string(),
                             data: None,
                         }),
-                    })
+                    }
                 }
             } else {
-                Some(JsonRpcResponse {
+                JsonRpcResponse {
                     jsonrpc: "2.0".to_string(),
                     id: request.id,
                     result: None,
@@ -330,12 +324,12 @@ async fn handle_request(server: &MacKeyboardServer, request: JsonRpcRequest) -> 
                         message: "Missing params".to_string(),
                         data: None,
                     }),
-                })
+                }
             }
         }
         _ => {
             // Unknown method
-            Some(JsonRpcResponse {
+            JsonRpcResponse {
                 jsonrpc: "2.0".to_string(),
                 id: request.id,
                 result: None,
@@ -344,7 +338,7 @@ async fn handle_request(server: &MacKeyboardServer, request: JsonRpcRequest) -> 
                     message: format!("Method not found: {}", method),
                     data: None,
                 }),
-            })
+            }
         }
     }
 }
